@@ -1,0 +1,66 @@
+# MySQL SETTINGS:
+database:
+  enabled: false
+  host: "localhost"
+  port: 3306
+  database_name: "tkits" # The name of the database (Change it if needed)
+  username: "root" 
+  password: "password" #Keep it empty if no password is set
+  
+  # Advanced settings
+  pool_size: 10
+  idle_timeout: 300000  # 5 minutes in milliseconds
+  connection_timeout: 10000  # 10 seconds in milliseconds
+
+  auto-save: true # If true, the kit will be saved automatically every x minutes
+  auto-save-time: 5 # In minutes
+
+# BROADCAST MESSAGES:
+loadkit-enabled: false # If true, the plugin will send a message to the player when they load a kit
+loadkit-prefix: "&7[&b&lT&3&lK&7] &f" # The prefix to send to the player when they load a kit
+loadkit-suffix: " &7loaded a &bKit" # The suffix to send to the player when they load a kit
+
+open-kitroom-enabled: false # If true, the plugin will open the kitroom
+open-kitroom-prefix: "&7[&b&lT&3&lK&7] &f" # The prefix to send to the player when they open the kitroom
+open-kitroom-suffix: " &7opened the &bKit Room" # The suffix to send to the player when they open the kitroom
+
+premadekit-enabled: true # If true, the plugin will load the premade kit
+premadekit-prefix: "&7[&b&lT&3&lK&7] " # The prefix to send to the player when they load the premade kit
+premadekit-suffix: " &7loaded the premade kit" # The suffix to send to the player when they load the premade kit
+
+# PLAYER MESSAGES:
+motd-enabled: false # If true, the plugin will send a message to the player when they join the server
+motd:
+  - "&3Type &b/k &3or &b/kit &3to get started" # The message to send to the player when they join the server
+motd-delay: 5 # In seconds
+
+info-enabled: true # If true, the plugin will send a message to the player when they join the server
+info:
+  - "&7Left click &bchest &7to load kit"
+  - "&7Right click &bchest &7to edit kit"
+
+# SOUND EFFECTS:
+sounds:
+  kit-load: "ENTITY_EXPERIENCE_ORB_PICKUP" # Sound played when a kit is loaded
+  kit-save: "BLOCK_NOTE_BLOCK_PLING" # Sound played when a kit is saved
+  menu-click: "UI_BUTTON_CLICK" # Sound played when a menu button is clicked
+  error: "ENTITY_VILLAGER_NO" # Sound played when an error occurs
+  success: "ENTITY_PLAYER_LEVELUP" # Sound played when an action is successful
+
+# WORLD CONFIG:
+disable-worlds: false # If true, the plugin will disable the worlds listed below
+worlds:
+  - "world_nether"
+  - "world_the_end"
+
+# KIT CONFIG:
+disable-echest: false # If true, the Ender Chest will be disabled
+expire-time: 5 # In minutes
+
+# INVENTORY MANAGEMENT:
+regear-enabled: true # If true, players can use /regear command
+arrange-enabled: true # If true, players can use /arrange or /rearrange command
+
+# SHARE CODE SETTINGS:
+one-time-codes: true # If true, shared kit codes can only be used once
+code-expiry-minutes: 5 # Time in minutes before a shared kit code expires

@@ -1,0 +1,72 @@
+name: T-Kits
+version: '1.0'
+main: com.takeda.Main
+api-version: 1.21
+authors: [ Takeda ]
+
+commands:
+  kit:
+    aliases: k
+    description: Open kit menu
+    permission: tkits.kit
+  kit1:
+    aliases: k1
+    description: Loads Kit 1
+    permission: tkits.kit
+  kit2:
+    aliases: k2
+    description: Loads Kit 2
+    permission: tkits.kit
+  kit3:
+    aliases: k3
+    description: Loads Kit 3
+    permission: tkits.kit
+  kit4:
+    aliases: k4
+    description: Loads Kit 4
+    permission: tkits.kit
+  kit5:
+    aliases: k5
+    description: Loads Kit 5
+    permission: tkits.kit
+  kit6:
+    aliases: k6
+    description: Loads Kit 6
+    permission: tkits.kit
+  kit7:
+    aliases: k7
+    description: Loads Kit 7
+    permission: tkits.kit
+  regear:
+    description: Refills consumable items and repairs shields
+    usage: /regear
+    aliases: []
+  arrange:
+    description: Rearranges inventory
+    usage: /arrange
+    aliases: [rearrange]
+  tkits:
+    description: Reload T-Kits configurations
+    usage: /tkits reload
+    permission: tkits.reload
+
+permissions:
+  tkits.*:
+    description: All permissions
+    children:
+      tkits.kit: true
+      tkits.edit: true
+      tkits.bypass: true
+      tkits.reload: true
+  tkits.kit:
+    description: Kit usage permission
+    default: true
+  tkits.edit:
+    description: Edit permission
+    default: op
+  tkits.bypass:
+    description: Bypass world restrictions
+    default: op
+  tkits.reload:
+    description: Allows reloading of T-Kits configurations
+    default: op
