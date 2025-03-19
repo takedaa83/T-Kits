@@ -1,6 +1,10 @@
 package com.takeda.events;
 
-import java.util.UUID;
+import com.takeda.Main;
+import com.takeda.gui.CopyKit;
+import com.takeda.gui.KitMenu;
+import com.takeda.utils.PremadeKitUtils;
+import com.takeda.utils.SoundUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -9,11 +13,8 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
-import com.takeda.Main;
-import com.takeda.gui.CopyKit;
-import com.takeda.gui.KitMenu;
-import com.takeda.utils.PremadeKitUtils;
-import com.takeda.utils.SoundUtils;
+
+import java.util.UUID;
 
 public class PremadeKitEvent implements Listener {
 
@@ -43,21 +44,21 @@ public class PremadeKitEvent implements Listener {
 
     private void handleBottomRowClick(Player player, int slot) {
         switch (slot) {
-            case 45: // Save changes
+            case 45:
                 PremadeKitUtils.save(player);
                 SoundUtils.playKitSaveSound(player);
                 break;
-            case 47: // Load inventory
+            case 47:
                 loadInventory(player);
                 break;
-            case 48: // Copy kit
+            case 48:
                 new CopyKit(player, 0, true);
                 SoundUtils.playMenuClickSound(player);
                 break;
-            case 49: // Clear inventory
+            case 49:
                 clearInventory(player);
                 break;
-            case 50: // Repair all items
+            case 50:
                 repairItems(player);
                 break;
         }
@@ -94,7 +95,7 @@ public class PremadeKitEvent implements Listener {
 
     private void handlePlayerActions(Player player, InventoryClickEvent event) {
         event.setCancelled(true);
-        if (event.getSlot() == 45) { // Back to menu
+        if (event.getSlot() == 45) {
             new KitMenu(player);
             SoundUtils.playMenuClickSound(player);
         }

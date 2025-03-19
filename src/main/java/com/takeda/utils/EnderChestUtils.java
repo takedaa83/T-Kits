@@ -1,11 +1,12 @@
 package com.takeda.utils;
 
-import java.util.Arrays;
-import java.util.HashMap;
+import com.takeda.Main;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import com.takeda.Main;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.Arrays;
+import java.util.HashMap;
 
 public class EnderChestUtils {
 
@@ -17,7 +18,7 @@ public class EnderChestUtils {
                 String echestKey = "echest" + echest;
                 try {
                     ItemStack[] contents;
-                    if (Main.getInstance().getDatabaseManager() != null && 
+                    if (Main.getInstance().getDatabaseManager() != null &&
                         Main.getInstance().getDatabaseManager().isEnabled()) {
                         contents = Main.getInstance().getStorage().loadEnderChest(player.getUniqueId(), echest);
                     } else {
@@ -49,7 +50,7 @@ public class EnderChestUtils {
                 }
 
                 if (echestItemsEmpty) {
-                    if (Main.getInstance().getDatabaseManager() != null && 
+                    if (Main.getInstance().getDatabaseManager() != null &&
                         Main.getInstance().getDatabaseManager().isEnabled()) {
                         Main.getInstance().getStorage().deleteEnderChest(player.getUniqueId(), echest);
                     } else {
@@ -59,8 +60,7 @@ public class EnderChestUtils {
                     return;
                 }
 
-                // Save to appropriate storage
-                if (Main.getInstance().getDatabaseManager() != null && 
+                if (Main.getInstance().getDatabaseManager() != null &&
                     Main.getInstance().getDatabaseManager().isEnabled()) {
                     Main.getInstance().getStorage().saveEnderChest(player.getUniqueId(), echest, echestItems);
                 } else {

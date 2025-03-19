@@ -1,66 +1,97 @@
-# MySQL SETTINGS:
+# Configuration for T-Kits Plugin
+
+###########################################################
+#                      DATABASE SETTINGS                  #
+###########################################################
 database:
-  enabled: false
-  host: "localhost"
-  port: 3306
-  database_name: "tkits" # The name of the database (Change it if needed)
-  username: "root" 
-  password: "password" #Keep it empty if no password is set
-  
-  # Advanced settings
-  pool_size: 10
-  idle_timeout: 300000  # 5 minutes in milliseconds
-  connection_timeout: 10000  # 10 seconds in milliseconds
+  enabled: false           # Enable MySQL database storage? (true/false)
+  host: "localhost"        # MySQL database host
+  port: 3306               # MySQL database port
+  database_name: "tkits"   # Name of the database to use
+  username: "root"         # MySQL username
+  password: "password"     # MySQL password (leave empty if no password)
 
-  auto-save: true # If true, the kit will be saved automatically every x minutes
-  auto-save-time: 5 # In minutes
+  # Advanced Connection Pool Settings (HikariCP)
+  pool_size: 10             # Maximum number of connections in the pool
+  idle_timeout: 300000      # время простоя (5 minutes in milliseconds)
+  connection_timeout: 10000 # Connection timeout (10 seconds in milliseconds)
 
-# BROADCAST MESSAGES:
-loadkit-enabled: false # If true, the plugin will send a message to the player when they load a kit
-loadkit-prefix: "&7[&b&lT&3&lK&7] &f" # The prefix to send to the player when they load a kit
-loadkit-suffix: " &7loaded a &bKit" # The suffix to send to the player when they load a kit
+  # Auto-Save Settings (for YAML and MySQL)
+  auto-save: true          # Enable automatic saving of data? (true/false)
+  auto-save-time: 5        # Auto-save interval in minutes
 
-open-kitroom-enabled: false # If true, the plugin will open the kitroom
-open-kitroom-prefix: "&7[&b&lT&3&lK&7] &f" # The prefix to send to the player when they open the kitroom
-open-kitroom-suffix: " &7opened the &bKit Room" # The suffix to send to the player when they open the kitroom
 
-premadekit-enabled: true # If true, the plugin will load the premade kit
-premadekit-prefix: "&7[&b&lT&3&lK&7] " # The prefix to send to the player when they load the premade kit
-premadekit-suffix: " &7loaded the premade kit" # The suffix to send to the player when they load the premade kit
+###########################################################
+#                  BROADCAST MESSAGE SETTINGS             #
+###########################################################
+broadcast-messages:
+  loadkit-enabled: false               # Enable broadcast message when a kit is loaded? (true/false)
+  loadkit-prefix: "&8[&3T&bKits&8] &7" # Prefix for the load kit broadcast message
+  loadkit-suffix: " &7loaded a &bKit"  # Suffix for the load kit broadcast message
 
-# PLAYER MESSAGES:
-motd-enabled: false # If true, the plugin will send a message to the player when they join the server
-motd:
-  - "&3Type &b/k &3or &b/kit &3to get started" # The message to send to the player when they join the server
-motd-delay: 5 # In seconds
+  open-kitroom-enabled: false                     # Enable broadcast message when Kit Room is opened? (true/false)
+  open-kitroom-prefix: "&8[&3T&bKits&8] &7"       # Prefix for the Kit Room open broadcast
+  open-kitroom-suffix: " &7opened the &bKit Room" # Suffix for Kit Room open broadcast
 
-info-enabled: true # If true, the plugin will send a message to the player when they join the server
-info:
-  - "&7Left click &bchest &7to load kit"
-  - "&7Right click &bchest &7to edit kit"
+  premadekit-enabled: true                        # Enable broadcast message when Premade Kit is loaded? (true/false)
+  premadekit-prefix: "&8[&3T&bKits&8] &7"         # Prefix for Premade Kit load broadcast
+  premadekit-suffix: " &7loaded the premade kit"  # Suffix for Premade Kit load broadcast
 
-# SOUND EFFECTS:
+
+###########################################################
+#                    PLAYER MESSAGE SETTINGS              #
+###########################################################
+player-messages:
+  motd-enabled: false       # Enable Message of the Day (MOTD) on player join? (true/false)
+  motd: # MOTD messages (displayed in action bar)
+    - "&bUse &3/kit &bto access your kits."
+  motd-delay: 5             # Delay in seconds before MOTD is displayed
+
+  info-enabled: true        # Enable info messages in Kit Menu? (true/false)
+  info: # Info messages for Kit Menu
+    - "&7Left-Click &bKit Chest &7to Load."    # Information line 1
+    - "&7Right-Click &bKit Chest &7to Edit."   # Information line 2
+
+
+###########################################################
+#                     SOUND EFFECT SETTINGS               #
+###########################################################
 sounds:
   kit-load: "ENTITY_EXPERIENCE_ORB_PICKUP" # Sound played when a kit is loaded
-  kit-save: "BLOCK_NOTE_BLOCK_PLING" # Sound played when a kit is saved
-  menu-click: "UI_BUTTON_CLICK" # Sound played when a menu button is clicked
-  error: "ENTITY_VILLAGER_NO" # Sound played when an error occurs
-  success: "ENTITY_PLAYER_LEVELUP" # Sound played when an action is successful
+  kit-save: "BLOCK_NOTE_BLOCK_PLING"       # Sound played when a kit is saved
+  menu-click: "UI_BUTTON_CLICK"            # Sound for menu button clicks
+  error: "ENTITY_VILLAGER_NO"              # Sound for error feedback
+  success: "ENTITY_PLAYER_LEVELUP"         # Sound for success feedback
 
-# WORLD CONFIG:
-disable-worlds: false # If true, the plugin will disable the worlds listed below
-worlds:
-  - "world_nether"
-  - "world_the_end"
 
-# KIT CONFIG:
-disable-echest: false # If true, the Ender Chest will be disabled
-expire-time: 5 # In minutes
+###########################################################
+#                      WORLD RESTRICTIONS                 #
+###########################################################
+world-config:
+  disable-worlds: false     # Disable kit usage in specific worlds? (true/false)
+  worlds: # List of worlds where kits are disabled (if disable-worlds: true)
+    - "world_nether"        # Example world: Nether
+    - "world_the_end"       # Example world: The End
 
-# INVENTORY MANAGEMENT:
-regear-enabled: true # If true, players can use /regear command
-arrange-enabled: true # If true, players can use /arrange or /rearrange command
 
-# SHARE CODE SETTINGS:
-one-time-codes: true # If true, shared kit codes can only be used once
-code-expiry-minutes: 5 # Time in minutes before a shared kit code expires
+###########################################################
+#                       KIT CONFIGURATION                 #
+###########################################################
+kit-config:
+  disable-echest: false    # Disable Ender Chest functionality in kits? (true/false)
+
+
+###########################################################
+#                    INVENTORY MANAGEMENT                 #
+###########################################################
+inventory-management:
+  regear-enabled: true     # Enable /regear command for players? (true/false)
+  arrange-enabled: true    # Enable /arrange or /rearrange command for players? (true/false)
+
+
+###########################################################
+#                     KIT SHARE CODE SETTINGS             #
+###########################################################
+share-code-settings:
+  one-time-codes: true     # Kit share codes valid for single use only? (true/false)
+  code-expiry-minutes: 5   # Kit share code expiration time in minutes

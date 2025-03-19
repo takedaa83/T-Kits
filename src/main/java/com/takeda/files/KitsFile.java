@@ -21,7 +21,7 @@ public class KitsFile {
 
         file = new File(dataFolder, "kits.yml");
 
-		Bukkit.getLogger().info("KitsFile: Attempting setup for kits.yml. File exists: " + file.exists());
+        Bukkit.getLogger().info("KitsFile: Setting up kits.yml. File exists: " + file.exists());
         if (!file.exists()) {
             copyResourceToFile();
         }
@@ -31,10 +31,10 @@ public class KitsFile {
             config = new YamlConfiguration();
             config.set("kits", new HashMap<>());
             config.set("echest", new HashMap<>());
-            Bukkit.getLogger().warning("KitsFile config loaded was either null or empty, setting up default empty maps.");
+            Bukkit.getLogger().warning("KitsFile config was null or empty, using default empty maps.");
         }
 
-        Bukkit.getLogger().info("KitsFile setup completed. Config keys: " + config.getKeys(false));
+        Bukkit.getLogger().info("KitsFile setup complete. Config keys: " + config.getKeys(false));
     }
 
 
@@ -47,7 +47,7 @@ public class KitsFile {
                 while ((len = in.read(buf)) > 0) {
                     out.write(buf, 0, len);
                 }
-                Bukkit.getLogger().info("KitsFile config copied from resource.");
+                Bukkit.getLogger().info("KitsFile: kits.yml copied from resources.");
             } else {
                 Bukkit.getLogger().severe("kits.yml not found in resources!");
                 throw new FileNotFoundException("kits.yml resource not found inside the jar file.");
@@ -56,7 +56,7 @@ public class KitsFile {
             config = new YamlConfiguration();
             config.set("kits", new HashMap<>());
             config.set("echest", new HashMap<>());
-            Bukkit.getLogger().warning("§c[T-Kits] §fCouldn't create/save kits.yml, setting up defaults: " + e.toString());
+            Bukkit.getLogger().warning("§c[T-Kits] §fCouldn't create/save kits.yml, using defaults: " + e);
         }
     }
 
@@ -70,7 +70,7 @@ public class KitsFile {
             config.save(file);
         } catch (IOException e) {
             Bukkit.getLogger().warning("§c[T-Kits] §fCouldn't save kits.yml");
-            Bukkit.getLogger().warning(e.toString());
+            Bukkit.getLogger().warning(String.valueOf(e));
         }
     }
 

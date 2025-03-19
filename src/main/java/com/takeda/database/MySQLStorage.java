@@ -262,10 +262,8 @@ public class MySQLStorage implements DataStorage {
 
     @Override
     public void saveAll() {
-        // No need to implement this for MySQL as everything is saved immediately
     }
 
-    // Utility methods for serialization
     private String itemStackArrayToBase64(ItemStack[] items) throws Exception {
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
              BukkitObjectOutputStream dataOutput = new BukkitObjectOutputStream(outputStream)) {

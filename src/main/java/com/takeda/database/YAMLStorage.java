@@ -6,11 +6,13 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 public class YAMLStorage implements DataStorage {
-    private final Main plugin; // Keep this if needed for future functionality
+    @SuppressWarnings("unused")
+    private final Main plugin;
 
     public YAMLStorage(Main plugin) {
         this.plugin = plugin;
@@ -26,7 +28,9 @@ public class YAMLStorage implements DataStorage {
     @Override
     public ItemStack[] loadKit(UUID uuid, int kitNumber) {
         String path = "kits." + uuid.toString() + ".kit" + kitNumber;
-        return KitsFile.get().getList(path).toArray(new ItemStack[0]);
+        List<?> list = KitsFile.get().getList(path);
+        if (list == null) return new ItemStack[0];
+        return list.toArray(new ItemStack[0]);
     }
 
     @Override
@@ -39,6 +43,8 @@ public class YAMLStorage implements DataStorage {
     @Override
     public ItemStack[] loadEnderChest(UUID uuid, int echestNumber) {
         String path = "echest." + uuid.toString() + ".echest" + echestNumber;
+        List<?> list = KitsFile.get().getList(path);
+        if (list == null) return new ItemStack[0];
         return KitsFile.get().getList(path).toArray(new ItemStack[0]);
     }
 
@@ -65,8 +71,11 @@ public class YAMLStorage implements DataStorage {
                 if (key.startsWith("kit")) {
                     try {
                         int kitNumber = Integer.parseInt(key.replace("kit", ""));
-                        ItemStack[] contents = section.getList(key).toArray(new ItemStack[0]);
-                        kits.put(kitNumber, contents);
+                        List<?> list = section.getList(key);
+                        if (list != null) {
+                            ItemStack[] contents = list.toArray(new ItemStack[0]);
+                            kits.put(kitNumber, contents);
+                        }
                     } catch (NumberFormatException ignored) {}
                 }
             }
@@ -83,8 +92,11 @@ public class YAMLStorage implements DataStorage {
                 if (key.startsWith("echest")) {
                     try {
                         int echestNumber = Integer.parseInt(key.replace("echest", ""));
-                        ItemStack[] contents = section.getList(key).toArray(new ItemStack[0]);
-                        enderChests.put(echestNumber, contents);
+                        List<?> list = section.getList(key);
+                        if (list != null) {
+                            ItemStack[] contents = list.toArray(new ItemStack[0]);
+                            enderChests.put(echestNumber, contents);
+                        }
                     } catch (NumberFormatException ignored) {}
                 }
             }

@@ -1,10 +1,11 @@
 package com.takeda.files;
 
-import java.io.InputStreamReader;
-import java.util.HashMap;
+import com.takeda.Main;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
-import com.takeda.Main;
+
+import java.io.InputStreamReader;
+import java.util.HashMap;
 
 public class KitRoomFile {
     private static final HashMap<Integer, ItemStack[]> items = new HashMap<>();
@@ -12,15 +13,14 @@ public class KitRoomFile {
 
     public static void loadItems() {
         config = YamlConfiguration.loadConfiguration(
-            new InputStreamReader(Main.getInstance().getResource("kitroom.yml")));
+                new InputStreamReader(Main.getInstance().getResource("kitroom.yml")));
 
-        items.clear(); // Clear existing items before loading
+        items.clear();
 
         if (config.contains("items")) {
             config.getConfigurationSection("items").getKeys(false).forEach(key -> {
                 int category = Integer.parseInt(key);
-                items.put(category, ((java.util.List<?>) config.getList("items." + key))
-                    .toArray(new ItemStack[0]));
+                items.put(category, config.getList("items." + key).toArray(new ItemStack[0]));
             });
         }
     }

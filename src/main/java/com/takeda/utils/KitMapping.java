@@ -1,6 +1,7 @@
 package com.takeda.utils;
 
 import org.bukkit.inventory.ItemStack;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -17,14 +18,21 @@ public class KitMapping {
         return lastLoadedKits.getOrDefault(playerUUID, -1);
     }
 
+    private KitMapping() {
+    }
+
     public static void storeKitContents(UUID playerUUID, int kitNumber, ItemStack[] contents) {
         kitContents.computeIfAbsent(playerUUID, k -> new HashMap<>())
-                   .put(kitNumber, contents.clone());
+                .put(kitNumber, contents.clone());
     }
 
     public static ItemStack[] getKitContents(UUID playerUUID, int kitNumber) {
-        return kitContents.getOrDefault(playerUUID, new HashMap<>())
-                         .get(kitNumber);
+        Map<Integer, ItemStack[]> playerKits = kitContents.get(playerUUID);
+        if (playerKits == null) {
+            return new ItemStack[0];
+        }
+        ItemStack[] contents = playerKits.get(kitNumber);
+        return contents == null ? null : contents.clone();
     }
 
     public static void clearPlayerData(UUID playerUUID) {

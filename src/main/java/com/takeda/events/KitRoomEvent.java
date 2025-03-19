@@ -1,15 +1,14 @@
 package com.takeda.events;
 
+import com.takeda.gui.KitMenu;
+import com.takeda.gui.KitRoom;
+import com.takeda.utils.KitRoomUtils;
+import com.takeda.utils.SoundUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-
-import com.takeda.gui.KitMenu;
-import com.takeda.gui.KitRoom;
-import com.takeda.utils.KitRoomUtils;
-import com.takeda.utils.SoundUtils;
 
 public class KitRoomEvent implements Listener {
 
@@ -32,24 +31,28 @@ public class KitRoomEvent implements Listener {
 
     private void handleBottomRowClick(Player player, int slot) {
         switch (slot) {
-            case 45: // Back button
+            case 45:
                 new KitMenu(player);
                 SoundUtils.playMenuClickSound(player);
                 break;
-            case 47: case 48: case 49: case 50: case 51: // Category buttons
+            case 47:
+            case 48:
+            case 49:
+            case 50:
+            case 51:
                 handleCategoryButtonClick(player, slot);
                 break;
-            case 52: // Save button
+            case 52:
                 handleSaveButtonClick(player);
                 break;
-            case 53: // Refill button
+            case 53:
                 handleRefillButtonClick(player);
                 break;
         }
     }
 
     private void handleCategoryButtonClick(Player player, int slot) {
-        int category = slot - 47; // Convert slot to category number (0-4)
+        int category = slot - 47;
         new KitRoom(player, category);
     }
 
@@ -61,7 +64,7 @@ public class KitRoomEvent implements Listener {
             }
         }
     }
-            
+
     private void handleRefillButtonClick(Player player) {
         int category = getCurrentCategory(currentEvent);
         if (category != -1) {

@@ -1,6 +1,5 @@
 package com.takeda.events;
 
-import java.util.UUID;
 import com.takeda.Main;
 import com.takeda.gui.EnderChestEditor;
 import com.takeda.gui.KitEditor;
@@ -15,6 +14,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+
+import java.util.UUID;
 
 public class KitMenuEvent implements Listener {
     private static final FileConfiguration config = Main.instance.getConfig();
@@ -35,19 +36,19 @@ public class KitMenuEvent implements Listener {
     }
 
     private void handleMenuActions(Player player, int slot, InventoryClickEvent event) {
-        if (10 <= slot && slot <= 16) { // Kit slots
+        if (10 <= slot && slot <= 16) {
             handleKitSlotClick(player, slot, event);
-        } else if (19 <= slot && slot <= 25 && !config.getBoolean("disable-echest")) { // Ender chest slots
+        } else if (19 <= slot && slot <= 25 && !config.getBoolean("disable-echest")) {
             handleEnderChestSlotClick(player, slot);
         } else {
             switch (slot) {
-                case 30: // Kit room button
+                case 30:
                     handleKitRoomButton(player);
                     break;
-                case 31: // Info button
+                case 31:
                     handleInfoButton(player);
                     break;
-                case 32: // Premade kit button
+                case 32:
                     handlePremadeKitButton(player, event.isLeftClick(), event.isRightClick());
                     break;
             }
@@ -75,9 +76,9 @@ public class KitMenuEvent implements Listener {
         new KitRoom(player, 0);
         SoundUtils.playMenuClickSound(player);
         if (config.getBoolean("open-kitroom-enabled")) {
-            String message = ConfigUtils.getColoredString("open-kitroom-prefix") + 
-                           player.getName() + 
-                           ConfigUtils.getColoredString("open-kitroom-suffix");
+            String message = ConfigUtils.getColoredString("open-kitroom-prefix") +
+                    player.getName() +
+                    ConfigUtils.getColoredString("open-kitroom-suffix");
             Main.instance.getServer().broadcastMessage(message);
         }
     }
@@ -85,8 +86,8 @@ public class KitMenuEvent implements Listener {
     private void handleInfoButton(Player player) {
         if (config.getBoolean("info-enabled")) {
             player.closeInventory();
-            config.getStringList("info").forEach(line -> 
-                SoundUtils.sendActionBar(player, ConfigUtils.formatMessage(line))
+            config.getStringList("info").forEach(line ->
+                    SoundUtils.sendActionBar(player, ConfigUtils.formatMessage(line))
             );
             SoundUtils.playMenuClickSound(player);
         }

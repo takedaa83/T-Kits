@@ -16,15 +16,15 @@ public class KitCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage(ConfigUtils.formatError("Only players can execute this command"));
+            sender.sendMessage(ConfigUtils.formatError("Only players can use this command."));
             return true;
         }
 
-        if (config.getBoolean("disable-worlds") && 
-            config.getStringList("worlds").contains(player.getWorld().getName()) && 
+        if (config.getBoolean("disable-worlds") &&
+                config.getStringList("worlds").contains(player.getWorld().getName()) &&
             !player.hasPermission("tkits.bypass")) {
             SoundUtils.playErrorSound(player);
-            SoundUtils.sendActionBar(player, ConfigUtils.formatError("You cannot use kits in this world"));
+            SoundUtils.sendActionBar(player, ConfigUtils.formatError("Kits disabled in this world."));
             return true;
         }
 

@@ -1,9 +1,9 @@
 package com.takeda.database;
 
+import com.takeda.Main;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.configuration.file.FileConfiguration;
-import com.takeda.Main;
 
 public class DatabaseManager {
     private static HikariDataSource dataSource;
@@ -23,7 +23,6 @@ public class DatabaseManager {
             return;
         }
 
-        // Validate database configuration
         String host = config.getString("database.host");
         int port = config.getInt("database.port");
         String databaseName = config.getString("database.database_name");
@@ -31,7 +30,7 @@ public class DatabaseManager {
         String password = config.getString("database.password");
 
         if (host == null || databaseName == null || username == null || password == null) {
-            plugin.getLogger().severe("§c[T-Kits] §fInvalid database configuration. Falling back to YAML storage.");
+            plugin.getLogger().severe("§c[T-Kits] §fInvalid database config. Falling back to YAML.");
             config.set("database.enabled", false);
             plugin.saveConfig();
             return;
@@ -52,16 +51,14 @@ public class DatabaseManager {
             dataSource = new HikariDataSource(hikariConfig);
             enabled = true;
             createTables();
-            plugin.getLogger().info("§b[T-Kits] §fSuccessfully connected to MySQL database.");
+            plugin.getLogger().info("§b[T-Kits] §fMySQL database connected.");
 
-            // Migrate data from YAML to MySQL if needed
             new DatabaseMigration(plugin).migrateData();
         } catch (Exception e) {
             enabled = false;
-            plugin.getLogger().severe("§c[T-Kits] §fFailed to connect to MySQL database. Falling back to YAML storage.");
+            plugin.getLogger().severe("§c[T-Kits] §fMySQL connect failed. Falling back to YAML.");
             plugin.getLogger().severe("§c[T-Kits] §fError: " + e.getMessage());
 
-            // Disable MySQL in config
             config.set("database.enabled", false);
             plugin.saveConfig();
         }
@@ -97,7 +94,7 @@ public class DatabaseManager {
                 stmt.execute(enderChests);
             }
         } catch (Exception e) {
-            plugin.getLogger().severe("§c[T-Kits] §fFailed to create database tables!");
+            plugin.getLogger().severe("§c[T-Kits] §fDatabase table creation failed!");
             plugin.getLogger().severe("§c[T-Kits] §fError: " + e.getMessage());
             enabled = false;
         }

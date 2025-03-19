@@ -1,10 +1,10 @@
 package com.takeda.utils;
 
+import com.takeda.Main;
+import com.takeda.database.DataStorage;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import com.takeda.Main;
-import com.takeda.database.DataStorage;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
@@ -25,20 +25,20 @@ public class PremadeKitUtils {
 
                     if (contents != null) {
                         player.getInventory().setContents(contents);
-                        SoundUtils.sendActionBar(player, ConfigUtils.formatSuccess("Loaded premade kit"));
+                        SoundUtils.sendActionBar(player, ConfigUtils.formatSuccess("Premade Kit Loaded"));
                         SoundUtils.playKitLoadSound(player);
 
                         if (config.getBoolean("premadekit-enabled")) {
-                            String message = ConfigUtils.getColoredString("premadekit-prefix") + 
-                                           player.getName() + 
-                                           ConfigUtils.getColoredString("premadekit-suffix");
+                            String message = ConfigUtils.getColoredString("premadekit-prefix") +
+                                    player.getName() +
+                                    ConfigUtils.getColoredString("premadekit-suffix");
                             Main.instance.getServer().broadcastMessage(message);
                         }
                     } else {
                         throw new Exception("Premade kit not found");
                     }
                 } catch (Exception e) {
-                    SoundUtils.sendActionBar(player, ConfigUtils.formatError("Premade kit has not been created"));
+                    SoundUtils.sendActionBar(player, ConfigUtils.formatError("Premade Kit not Created"));
                     SoundUtils.playErrorSound(player);
                 }
             }
@@ -56,15 +56,15 @@ public class PremadeKitUtils {
 
                     if (KitUtils.isKitEmpty(processedItems)) {
                         storage.deleteKit(SYSTEM_UUID, PREMADE_KIT_NUMBER);
-                        SoundUtils.sendActionBar(player, ConfigUtils.formatMessage("Premade kit cleared"));
+                        SoundUtils.sendActionBar(player, ConfigUtils.formatMessage("Premade Kit Cleared"));
                         return;
                     }
 
                     storage.saveKit(SYSTEM_UUID, PREMADE_KIT_NUMBER, processedItems);
-                    SoundUtils.sendActionBar(player, ConfigUtils.formatSuccess("Premade kit saved"));
+                    SoundUtils.sendActionBar(player, ConfigUtils.formatSuccess("Premade Kit Saved"));
                     SoundUtils.playKitSaveSound(player);
                 } catch (Exception e) {
-                    SoundUtils.sendActionBar(player, ConfigUtils.formatError("Failed to save premade kit"));
+                    SoundUtils.sendActionBar(player, ConfigUtils.formatError("Failed to Save Premade Kit"));
                     SoundUtils.playErrorSound(player);
                     e.printStackTrace();
                 }

@@ -21,21 +21,19 @@ public class DatabaseMigration {
     }
 
     public void migrateData() {
-        plugin.getLogger().info("§b[T-Kits] §fStarting data migration from YAML to MySQL...");
+        plugin.getLogger().info("§b[T-Kits] §fStarting YAML to MySQL data migration...");
 
         FileConfiguration config = KitsFile.get();
         if (config == null) {
-            plugin.getLogger().info("§b[T-Kits] §fCannot perform database migration: KitsFile config is null.");
-            return; // Exit early if config is null
+            plugin.getLogger().info("§b[T-Kits] §fMigration skipped: KitsFile config null.");
+            return;
         }
 
         if (config.getKeys(false).isEmpty()) {
-            plugin.getLogger().info("§b[T-Kits] §fKitsFile config is empty, skipping migration."); // Skip and log as INFO
-            return; // Exit early if empty config, do nothing if that happens.
+            plugin.getLogger().info("§b[T-Kits] §fMigration skipped: KitsFile config empty.");
+            return;
         }
 
-
-        // Migrate kits
         ConfigurationSection kitsSection = config.getConfigurationSection("kits");
         if (kitsSection != null) {
             for (String uuidStr : kitsSection.getKeys(false)) {
@@ -52,7 +50,6 @@ public class DatabaseMigration {
             }
         }
 
-        // Migrate ender chests
         ConfigurationSection echestSection = config.getConfigurationSection("echest");
         if (echestSection != null) {
             for (String uuidStr : echestSection.getKeys(false)) {
@@ -69,20 +66,19 @@ public class DatabaseMigration {
             }
         }
 
-        // Log migration results
-        plugin.getLogger().info("§b[T-Kits] §fMigration completed:");
-        plugin.getLogger().info("§b[T-Kits] §f- Successfully migrated: " + totalMigrated + " items");
+        plugin.getLogger().info("§b[T-Kits] §fMigration complete:");
+        plugin.getLogger().info("§b[T-Kits] §f- Migrated items: " + totalMigrated);
         if (totalErrors > 0) {
-            plugin.getLogger().warning("§c[T-Kits] §f- Errors encountered: " + totalErrors);
+            plugin.getLogger().warning("§c[T-Kits] §f- Migration errors: " + totalErrors);
         }
     }
-	
+
     private void migratePlayerKits(UUID uuid, ConfigurationSection playerSection) {
         for (String kitKey : playerSection.getKeys(false)) {
             if (kitKey.startsWith("kit")) {
                 try {
                     int kitNumber = Integer.parseInt(kitKey.replace("kit", ""));
-					List<?> list = playerSection.getList(kitKey);
+                    List<?> list = playerSection.getList(kitKey);
                     ItemStack[] contents = list != null ? list.toArray(new ItemStack[0]) : new ItemStack[0];
                     mysqlStorage.saveKit(uuid, kitNumber, contents);
                     totalMigrated++;
@@ -98,7 +94,6 @@ public class DatabaseMigration {
         }
     }
 
-
     private void migratePlayerEnderChests(UUID uuid, ConfigurationSection playerSection) {
         for (String echestKey : playerSection.getKeys(false)) {
             if (echestKey.startsWith("echest")) {
@@ -110,7 +105,7 @@ public class DatabaseMigration {
                     totalMigrated++;
                     plugin.getLogger().info("§b[T-Kits] §fMigrated enderchest " + echestNumber + " for player " + uuid);
                 } catch (NumberFormatException e) {
-                    plugin.getLogger().warning("§c[T-Kits] §fInvalid enderchest number format: " + echestKey);
+                    plugin.getLogger().warning("§c[T-Kits] §fInvalid echest number format: " + echestKey);
                     totalErrors++;
                 } catch (Exception e) {
                     plugin.getLogger().warning("§c[T-Kits] §fError migrating enderchest " + echestKey + " for player " + uuid);

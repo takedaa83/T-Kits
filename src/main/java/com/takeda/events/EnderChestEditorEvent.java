@@ -1,6 +1,5 @@
 package com.takeda.events;
 
-import java.util.UUID;
 import com.takeda.Main;
 import com.takeda.gui.KitMenu;
 import com.takeda.utils.EnderChestUtils;
@@ -13,6 +12,8 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.UUID;
 
 public class EnderChestEditorEvent implements Listener {
 
@@ -35,14 +36,14 @@ public class EnderChestEditorEvent implements Listener {
 
     private void handleMenuActions(Player player, int slot) {
         switch (slot) {
-            case 27: // Back to menu
+            case 27:
                 new KitMenu(player);
                 SoundUtils.playMenuClickSound(player);
                 break;
-            case 30: // Clear inventory
+            case 30:
                 clearInventory(player);
                 break;
-            case 31: // Repair all items
+            case 31:
                 repairItems(player);
                 break;
         }

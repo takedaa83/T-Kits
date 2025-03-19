@@ -1,5 +1,5 @@
 name: T-Kits
-version: '1.0'
+version: ${project.version}
 main: com.takeda.Main
 api-version: 1.21
 authors: [ Takeda ]

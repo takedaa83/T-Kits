@@ -1,8 +1,8 @@
 package com.takeda.commands;
 
 import com.takeda.Main;
-import com.takeda.utils.KitUtils;
 import com.takeda.utils.ConfigUtils;
+import com.takeda.utils.KitUtils;
 import com.takeda.utils.SoundUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,15 +16,15 @@ public class KitClaimer implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage(ConfigUtils.formatError("Only players can execute this command"));
+            sender.sendMessage(ConfigUtils.formatError("Only players can use this command."));
             return true;
         }
 
-        if (config.getBoolean("disable-worlds") && 
-            config.getStringList("worlds").contains(player.getWorld().getName()) && 
+        if (config.getBoolean("disable-worlds") &&
+                config.getStringList("worlds").contains(player.getWorld().getName()) &&
             !player.hasPermission("tkits.bypass")) {
             SoundUtils.playErrorSound(player);
-            SoundUtils.sendActionBar(player, ConfigUtils.formatError("You cannot use kits in this world"));
+            SoundUtils.sendActionBar(player, ConfigUtils.formatError("Kits disabled in this world."));
             return true;
         }
 
@@ -32,7 +32,7 @@ public class KitClaimer implements CommandExecutor {
             int kit = Integer.parseInt(command.getName().replace("kit", "").replace("k", ""));
             KitUtils.claim(player, kit, true);
         } catch (Exception e) {
-            SoundUtils.sendActionBar(player, ConfigUtils.formatError("Invalid kit number"));
+            SoundUtils.sendActionBar(player, ConfigUtils.formatError("Invalid kit number."));
             SoundUtils.playErrorSound(player);
         }
 

@@ -1,116 +1,89 @@
 package com.takeda.gui;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.takeda.Main;
+import com.takeda.utils.ItemUtils;
+import com.takeda.utils.KitUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import com.takeda.Main;
-import com.takeda.utils.ItemUtils;
-import com.takeda.utils.KitUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class KitEditor {
     public KitEditor(Player player, int kit, boolean copyKit, String code, ItemStack[] items) {
         String kitName = "Kit " + kit;
-        Inventory kitEditor = Bukkit.createInventory(player, 54, ChatColor.DARK_PURPLE + "✦ " + kitName + " Editor");
+        Inventory kitEditor = Bukkit.createInventory(player, 54, ChatColor.DARK_GRAY + "Kit Editor - " + kitName);
 
-      if (copyKit && items != null) {
-          // Process the items before setting them
+        if (copyKit && items != null) {
             ItemStack[] processedItems = KitUtils.processKitContents(items);
-            // Only set the first 41 slots (inventory + equipment)
             for (int i = 0; i < 41 && i < processedItems.length; i++) {
-                 kitEditor.setItem(i, processedItems[i]);
-             }
-           }  else {
-  
-               ItemStack[] kitContents = KitUtils.getKitContents(player, kit);
-              if (kitContents != null) {
-                   // Process the items before setting them
-                  ItemStack[] processedItems = KitUtils.processKitContents(kitContents);
-                   for (int i = 0; i < 41 && i < processedItems.length; i++) {
-                         kitEditor.setItem(i, processedItems[i]);
-                  }
-                 }
-           }
-        // Equipment slots label
-        List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "➤ " + ChatColor.WHITE + "Equipment Slots");
-        lore.add("");
-        lore.add(ChatColor.GRAY + "• Boots");
-        lore.add(ChatColor.GRAY + "• Leggings");
-       lore.add(ChatColor.GRAY + "• Chestplate");
-        lore.add(ChatColor.GRAY + "• Helmet");
-        lore.add(ChatColor.GRAY + "• Offhand");
-       ItemStack equipLabel = ItemUtils.getItem("", Material.LIGHT_BLUE_STAINED_GLASS_PANE, lore);
+                kitEditor.setItem(i, processedItems[i]);
+            }
+        } else {
 
-          for (int i = 41; i <= 44; i++) {
-             kitEditor.setItem(i, equipLabel);
-          }
-          // Menu buttons
-         ItemStack backButton = ItemUtils.getItem(ChatColor.AQUA + "» Back to Menu", Material.SCULK_SENSOR, List.of(
-            ChatColor.GRAY + "➤ " + ChatColor.WHITE + "Click to return",
-            "",
-           ChatColor.GRAY + "Return to the main menu",
-          ChatColor.GRAY + "Your changes will be saved"
-          ));
-        ItemStack loadInv = ItemUtils.getItem(ChatColor.YELLOW + "» Load Inventory", Material.BUNDLE, List.of(
-            ChatColor.GRAY + "➤ " + ChatColor.WHITE + "Click to import items",
-            "",
-             ChatColor.GRAY+ "Import all items from your",
-           ChatColor.GRAY + "current inventory"
+            ItemStack[] kitContents = KitUtils.getKitContents(player, kit);
+            if (kitContents != null) {
+                ItemStack[] processedItems = KitUtils.processKitContents(kitContents);
+                for (int i = 0; i < 41 && i < processedItems.length; i++) {
+                    kitEditor.setItem(i, processedItems[i]);
+                }
+            }
+        }
+
+        List<String> lore = new ArrayList<>();
+        lore.add(ChatColor.GRAY + "Equipment Slots");
+        lore.add(ChatColor.DARK_GRAY + "Boots, Legs, Chest, Helm, Offhand");
+        ItemStack equipLabel = ItemUtils.getItem("&9Equipment Slots", Material.CYAN_STAINED_GLASS_PANE, lore);
+
+        for (int i = 41; i <= 44; i++) {
+            kitEditor.setItem(i, equipLabel);
+        }
+
+        ItemStack backButton = ItemUtils.getItem("&cBack", Material.RED_CONCRETE, Arrays.asList(
+                "&7Return to Kit Menu."
         ));
-         ItemStack shareKit = ItemUtils.getItem(ChatColor.GOLD + "» Share Kit", Material.RECOVERY_COMPASS, List.of(
-            ChatColor.GRAY + "➤ " + ChatColor.WHITE + "Click to share kit",
-            "",
-             ChatColor.GRAY + "Generate a unique code to",
-           ChatColor.GRAY + "share this kit with others",
-              "",
-            ChatColor.YELLOW + "• " + ChatColor.GRAY + "Expires in " + Main.instance.getConfig().getInt("code-expiry-minutes", 5) + " minutes",
-            ChatColor.RED + (Main.instance.getConfig().getBoolean("one-time-codes", true) ? 
-               "• One-time use only" : "• Multiple uses allowed")
-     ));
-       ItemStack copyButton = ItemUtils.getItem(ChatColor.BLUE + "» Copy Kit", Material.KNOWLEDGE_BOOK, List.of(
-            ChatColor.GRAY + "➤ " + ChatColor.WHITE + "Click to import kit",
-            "",
-           ChatColor.GRAY+ "Import items using a kit code",
-          ChatColor.GRAY +  "shared by another player"
+        ItemStack loadInv = ItemUtils.getItem("&aLoad Inventory", Material.BUNDLE, Arrays.asList(
+                "&7Load items from your inventory.",
+                "&7Overwrites current kit items."
         ));
-        ItemStack clearInv = ItemUtils.getItem(ChatColor.RED + "» Clear Items", Material.BARRIER, List.of(
-           ChatColor.GRAY + "➤ " + ChatColor.WHITE + "Click to clear all",
-           "",
-           ChatColor.GRAY + "Remove all items from",
-           ChatColor.GRAY + "this kit",
-            "",
-            ChatColor.RED + "✕ " + ChatColor.GRAY + "This cannot be undone!"
-    ));
-        ItemStack repairItems = ItemUtils.getItem(ChatColor.LIGHT_PURPLE + "» Repair All", Material.AMETHYST_SHARD, List.of(
-            ChatColor.GRAY + "➤ " + ChatColor.WHITE + "Click to repair items",
-             "",
-             ChatColor.GRAY + "Restore all items to full",
-           ChatColor.GRAY+ "durability"
+        ItemStack shareKit = ItemUtils.getItem("&bShare Kit", Material.COMPASS, Arrays.asList(
+                "&7Share this kit with a code.",
+                "&7Expires after &e" + Main.instance.getConfig().getInt("code-expiry-minutes", 5) + " minutes&7."
         ));
-       ItemStack filler = ItemUtils.getItem("", Material.LIGHT_BLUE_STAINED_GLASS_PANE, null);
+        ItemStack copyButton = ItemUtils.getItem("&3Import Kit", Material.KNOWLEDGE_BOOK, Arrays.asList(
+                "&7Import kit using a shared code."
+        ));
+        ItemStack clearInv = ItemUtils.getItem("&eClear Kit", Material.BARRIER, Arrays.asList(
+                "&7Remove all items from this kit.",
+                "&cCannot be undone!"
+        ));
+        ItemStack repairItems = ItemUtils.getItem("&aRepair Items", Material.ANVIL, Arrays.asList(
+                "&7Repair all damageable items.",
+                "&7Restores item durability."
+        ));
+        ItemStack filler = ItemUtils.getItem(" ", Material.LIGHT_GRAY_STAINED_GLASS_PANE, null);
 
         kitEditor.setItem(45, backButton);
         kitEditor.setItem(47, loadInv);
         kitEditor.setItem(48, shareKit);
-         kitEditor.setItem(49, copyButton);
+        kitEditor.setItem(49, copyButton);
         kitEditor.setItem(50, clearInv);
         kitEditor.setItem(51, repairItems);
 
-        // Fill empty slots
         for (int i = 45; i <= 53; i++) {
-          if (kitEditor.getItem(i) == null) {
-               kitEditor.setItem(i, filler);
-          }
-      }
-       player.openInventory(kitEditor);
+            if (kitEditor.getItem(i) == null) {
+                kitEditor.setItem(i, filler);
+            }
+        }
+        player.openInventory(kitEditor);
         Main.kitEditorChecker.put(player.getUniqueId(), kit);
     }
     public KitEditor(Player player, int kit, boolean copyKit, String code) {
-      this(player, kit, copyKit, code, null);
+        this(player, kit, copyKit, code, null);
     }
 }

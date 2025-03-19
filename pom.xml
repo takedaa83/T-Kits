@@ -6,68 +6,99 @@
 
     <groupId>com.takeda</groupId>
     <artifactId>T-Kits</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
+    <packaging>jar</packaging> <!-- Added: Explicitly define packaging type -->
+
+    <name>T-Kits</name> <!-- Added: Project name for clarity -->
+    <description>Enhanced Kit Management Plugin for Spigot Servers</description> <!-- Added: Project description -->
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <build.timestamp>${maven.build.timestamp}</build.timestamp>
+        <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
+
+        <!-- Dependency Versions - Centralized for easier management -->
+        <spigot.version>1.21.1-R0.1-SNAPSHOT</spigot.version>
+        <anvilgui.version>1.10.3-SNAPSHOT</anvilgui.version>
+        <hikaricp.version>5.1.0</hikaricp.version> <!-- Updated to latest stable version -->
+        <junit.version>4.13.2</junit.version>
     </properties>
 
     <repositories>
-        <!-- Spigot Maven repository -->
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
-        <!-- CodeMC repository for AnvilGUI -->
         <repository>
             <id>codemc-snapshots</id>
             <url>https://repo.codemc.io/repository/maven-snapshots/</url>
         </repository>
-        <!-- Maven Central for HikariCP and other dependencies -->
         <repository>
             <id>central</id>
             <url>https://repo.maven.apache.org/maven2</url>
         </repository>
+        <!-- Added: Placeholder for potential future repositories -->
+        <!--
+        <repository>
+            <id>your-other-repo</id>
+            <url>your-repo-url</url>
+        </repository>
+        -->
     </repositories>
 
     <dependencies>
-        <!-- Spigot API -->
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.21.1-R0.1-SNAPSHOT</version>
+            <version>${spigot.version}</version> <!-- Using property -->
             <scope>provided</scope>
         </dependency>
-
-        <!-- AnvilGUI for GUI creation -->
         <dependency>
             <groupId>net.wesjd</groupId>
             <artifactId>anvilgui</artifactId>
-            <version>1.10.3-SNAPSHOT</version>
+            <version>${anvilgui.version}</version> <!-- Using property -->
             <scope>compile</scope>
         </dependency>
-
-        <!-- HikariCP for MySQL connection pooling -->
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>6.2.1</version>
+            <version>${hikaricp.version}</version> <!-- Using property and updated version -->
         </dependency>
-
-        <!-- JUnit for testing -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.13.2</version>
+            <version>${junit.version}</version> <!-- Using property -->
             <scope>test</scope>
         </dependency>
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>plugin.yml</include>
+                    <include>plugin.properties</include>
+                    <include>**/*.yml</include>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>plugin.yml</exclude>
+                    <exclude>plugin.properties</exclude>
+                    <exclude>**/*.yml</exclude>
+                    <exclude>**/*.properties</exclude>
+                </excludes>
+            </resource>
+        </resources>
+
         <plugins>
-            <!-- Maven Shade Plugin for bundling dependencies -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -80,7 +111,6 @@
                         </goals>
                         <configuration>
                             <relocations>
-                                <!-- Relocate AnvilGUI to avoid conflicts -->
                                 <relocation>
                                     <pattern>net.wesjd.anvilgui</pattern>
                                     <shadedPattern>com.takeda.anvilgui</shadedPattern>
@@ -100,14 +130,13 @@
                 </executions>
             </plugin>
 
-            <!-- Maven Compiler Plugin for Java 17 compatibility -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
+                <version>3.11.0</version> <!-- Updated to latest version -->
                 <configuration>
-                    <source>17</source>
-                    <target>17</target>
+                    <source>${maven.compiler.source}</source> <!-- Using property -->
+                    <target>${maven.compiler.target}</target> <!-- Using property -->
                 </configuration>
             </plugin>
         </plugins>
