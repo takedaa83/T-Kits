@@ -1,5 +1,11 @@
 package com.takeda.tkits.listeners;
 
+import org.bukkit.configuration.file.FileConfiguration;
+import java.util.List;
+import java.util.ArrayList;   // <-- add this line
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import com.takeda.tkits.TKits;
 import com.takeda.tkits.models.Kit;
 import com.takeda.tkits.services.CooldownService;
@@ -184,42 +190,47 @@ public class InteractionListener implements Listener {
     }
 
     private void openRegearShellInventory(Player player, Kit lastKit) {
-        Component title = msg.deserialize(
-            plugin
-                .getConfigManager()
-                .getMainConfig()
-                .getString(
-                    "gui.regear_box_title",
-                    "&8Regear - Kit {kit_number}"
-                )
-                .replace("{kit_number}", String.valueOf(lastKit.getKitNumber()))
-        );
+        // ========== 标题：从 gui.yml 读取 ==========
+        FileConfiguration guiConfig = plugin.getConfigManager().getGuiConfig();
+        String titleRaw = guiConfig.getString("titles.regear_box", "&8Regear - Kit {kit_number}");
+        titleRaw = titleRaw.replace("{kit_number}", String.valueOf(lastKit.getKitNumber()));
+        Component title = msg.deserialize(titleRaw, player);
+
         Inventory gui = Bukkit.createInventory(
             new RegearInventoryHolder(lastKit),
             InventoryType.SHULKER_BOX,
             title
         );
 
-        
+        // --- 读取配置中的显示名称 ---
+        String displayNameRaw = msg.getRawMessage("regear_now",
+                "&aRᴇɢᴇᴀʀ Nᴏᴡ");
+        Component displayName = msg.deserialize(displayNameRaw, player);
+
+        // --- 读取配置中的 Lore ---
+        String loreRaw = msg.getRawMessage("shell_lore",
+                "&7Click to restock your inventory using Kit {kit_number}.");
+        loreRaw = loreRaw.replace("{kit_number}", String.valueOf(lastKit.getKitNumber()));
+        List<Component> lore = new ArrayList<>();
+        if (!loreRaw.trim().isEmpty()) {
+            lore.add(msg.deserialize(loreRaw, player));
+        }
+
         ItemStack shell = GuiUtils.createGuiItem(
             Material.SHULKER_SHELL,
-            msg.deserialize("&a<0xF0><0x9F><0xAA><0xA6> Rᴇɢᴇᴀʀ Nᴏᴡ"),
-            List.of(
-                msg.deserialize("&7Click to restock your inventory"),
-                msg.deserialize("&7using Kit " + lastKit.getKitNumber() + ".")
-            ),
+            displayName,
+            lore,
             0
         );
+        // --- 其余代码不变：设置持久数据、填充 GUI 等 ---
         ItemMeta shellMeta = shell.getItemMeta();
         if (shellMeta != null) {
-            shellMeta
-                .getPersistentDataContainer()
+            shellMeta.getPersistentDataContainer()
                 .set(regearShellKey, PersistentDataType.BYTE, (byte) 1);
             shell.setItemMeta(shellMeta);
         }
 
-        
-        for (int slot = 11; slot <= 17; slot++) {
+        for (int slot = 9; slot <= 17; slot++) {
             gui.setItem(slot, shell.clone());
         }
 
