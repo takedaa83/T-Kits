@@ -213,6 +213,8 @@ messages:
   inventory_full_item_dropped: "&e&l⚠ &fInventory full, some items were dropped on the ground!"
   inventory_full_items_dropped_arrange: "&e&l⚠ &fInventory full, extra items dropped after arrange!"
   inventory_arrange_kept_extras: "&e&lℹ &fInventory arranged. Extra items remain."
+  regear_now: "&aRᴇɢᴇᴀʀ Nᴏᴡ"
+  shell_lore: "&7Click to restock your inventory using Kit {kit_number}."
 
   # Combat & Cooldown Messages
   in_combat: "&c&l⚔ &fIn Combat! &7Action prevented (&e{time}s&7 left)."
